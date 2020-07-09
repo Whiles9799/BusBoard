@@ -19,11 +19,13 @@ namespace BusBoard.ConsoleApp
         case "S":
           Console.WriteLine("Please enter your desired stop point ID:");
           var stopCode = Console.ReadLine();
+          Console.WriteLine(" ");
           PrintBussesFromStopCode(stopCode);
           break;
         case "P":
           Console.WriteLine("Please enter your desired postcode");
           var postcode = Console.ReadLine();
+          Console.WriteLine(" ");
           foreach (var sc in getTwoClosestBusStopsToPostcode(postcode))
           {
             PrintBussesFromStopCode(sc);
@@ -37,7 +39,7 @@ namespace BusBoard.ConsoleApp
 
     private static List<String> getTwoClosestBusStopsToPostcode(string postcode)
     {
-      
+      return null;
     }
 
     private static void PrintBussesFromStopCode(string stopCode)
