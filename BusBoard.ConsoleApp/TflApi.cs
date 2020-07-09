@@ -20,13 +20,13 @@ namespace BusBoard.ConsoleApp
             return closestTwoStops;
         }
         
-        public IEnumerable<Bus> GetListOfArrivalPredictionsForStopPoint(string stopCode)
+        public IEnumerable<BusArrivalPrediction> GetListOfArrivalPredictionsForStopPoint(string stopCode)
         {
             var requestUrl = "https://api.tfl.gov.uk";
             var client = new RestClient(requestUrl);
             var request = new RestRequest($"StopPoint/{stopCode}/Arrivals", DataFormat.Json);
-            var buses = client.Execute<List<Bus>>(request).Data;
-            IEnumerable<Bus> nextFiveBuses = buses.OrderBy(bus => bus.ExpectedArrival).Take(5);
+            var buses = client.Execute<List<BusArrivalPrediction>>(request).Data;
+            IEnumerable<BusArrivalPrediction> nextFiveBuses = buses.OrderBy(bus => bus.ExpectedArrival).Take(5);
             return nextFiveBuses;
         }
         
