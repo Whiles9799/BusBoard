@@ -20,15 +20,15 @@ namespace BusBoard.ConsoleApp
           Console.WriteLine("Please enter your desired stop point ID:");
           var stopCode = Console.ReadLine();
           Console.WriteLine(" ");
-          PrintBussesFromStopCode(stopCode);
+          PrintBusesFromStopCode(stopCode);
           break;
         case "P":
           Console.WriteLine("Please enter your desired postcode");
           var postcode = Console.ReadLine();
           Console.WriteLine(" ");
-          foreach (var sc in getTwoClosestBusStopsToPostcode(postcode))
+          foreach (var sc in GetTwoClosestBusStopsToPostcode(postcode))
           {
-            PrintBussesFromStopCode(sc);
+            PrintBusesFromStopCode(sc);
           }
           break;
         default:
@@ -37,12 +37,24 @@ namespace BusBoard.ConsoleApp
       }
     }
 
-    private static List<String> getTwoClosestBusStopsToPostcode(string postcode)
+    private static List<String> GetTwoClosestBusStopsToPostcode(string postcodeString)
     {
+      IRestResponse response = LookupPostcodeLocation(postcodeString);
+      var postcodeApiResponse = JsonConvert.DeserializeObject<PostcodeApiResponse>(response.Content);
+      var postcode = postcodeApiResponse.Result;
       return null;
     }
 
-    private static void PrintBussesFromStopCode(string stopCode)
+    private static IRestResponse LookupPostcodeLocation(string postcode)
+    {
+      var requestUrl = "http://api.postcodes.io";
+      var client = new RestClient(requestUrl);
+      var request = new RestRequest($"postcodes/{postcode}", DataFormat.Json);
+      var response = client.Execute(request);
+      return response;
+    }
+
+    private static void PrintBusesFromStopCode(string stopCode)
     {
       var response = GetListOfArrivalPredictionsForStopPoint(stopCode);
       var buses = GetNext5BusesFromApiResponse(response);
