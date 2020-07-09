@@ -7,11 +7,10 @@ namespace BusBoard.ConsoleApp
   {
     static void Main(string[] args)
     {
-      BusBoard.Api.TflApi api = new BusBoard.Api.TflApi();
-      PromptUserAndGetInputFromConsole(api);
+      PromptUserAndGetInputFromConsole();
     }
 
-    private static void PromptUserAndGetInputFromConsole(BusBoard.Api.TflApi api)
+    private static void PromptUserAndGetInputFromConsole()
     {
       Console.WriteLine("Postcode or Stop point ID? (P or S)");
       switch (Console.ReadLine().ToUpper())
@@ -20,15 +19,15 @@ namespace BusBoard.ConsoleApp
           Console.WriteLine("Please enter your desired stop point ID:");
           var stopCode = Console.ReadLine();
           Console.WriteLine(" ");
-          PrintBusesFromStopCode(stopCode, "", api);
+          PrintBusesFromStopCode(stopCode, "");
           break;
         case "P":
           Console.WriteLine("Please enter your desired postcode");
           var postcode = Console.ReadLine();
           Console.WriteLine(" ");
-          foreach (var sc in api.GetTwoClosestBusStopsToPostcode(postcode))
+          foreach (var sc in TflApi.GetTwoClosestBusStopsToPostcode(postcode))
           {
-            PrintBusesFromStopCode(sc.NaptanId, sc.CommonName, api);
+            PrintBusesFromStopCode(sc.NaptanId, sc.CommonName);
           }
 
           break;
@@ -38,9 +37,9 @@ namespace BusBoard.ConsoleApp
       }
     }
 
-    private static void PrintBusesFromStopCode(string stopCode, string commonName, TflApi api)
+    private static void PrintBusesFromStopCode(string stopCode, string commonName)
     {
-      var buses = api.GetListOfArrivalPredictionsForStopPoint(stopCode);
+      var buses = TflApi.GetListOfArrivalPredictionsForStopPoint(stopCode);
       Console.WriteLine($"Next 5 Buses at stop {stopCode} - {commonName}");
       foreach (var bus in buses)
       {

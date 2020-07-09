@@ -1,4 +1,5 @@
-﻿@model BusBoard.Web.ViewModels.BusInfo
+﻿@using BusBoard.Api
+@model BusBoard.Web.ViewModels.BusInfo
 @{
   ViewBag.Title = "Bus Information";
 }
@@ -6,5 +7,29 @@
 <h2>BusInfo</h2>
 
 <div class="row">
-    <p>You entered postcode @Model.PostCode</p>
+    <h3>Departure Information for bus stops near @Model.PostCode.ToUpper()</h3>
+    
+    @foreach (var stop in TflApi.GetTwoClosestBusStopsToPostcode(Model.PostCode))
+    {
+        var buses = TflApi.GetListOfArrivalPredictionsForStopPoint(stop.NaptanId);
+        <p><b>@($"{stop.NaptanId} - {stop.CommonName}")</b></p>
+        <table border = "1px solid black">
+            <tr>
+                <th style="padding:10px">Line</th>
+                <th style="padding:10px">Destination</th>
+                <th style="padding:10px">ETA</th>
+            </tr>
+        
+            @foreach (var bus in buses)
+            {
+                <tr>
+                    <td style="padding:10px">@bus.LineName</td>
+                    <td style="padding:10px">@bus.DestinationName</td>
+                    <td style="padding:10px">@bus.ExpectedArrival.AddHours(1).ToString("HH:mm:ss tt")</td>
+                </tr>
+            }
+        </table>
+        <br>
+        <br>
+    } 
 </div>

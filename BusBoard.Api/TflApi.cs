@@ -7,7 +7,7 @@ namespace BusBoard.Api
 {
     public class TflApi
     {
-        public IEnumerable<BusStop> GetTwoClosestBusStopsToPostcode(string postcodeString)
+        public static IEnumerable<BusStop> GetTwoClosestBusStopsToPostcode(string postcodeString)
         {
             var requestUrl = "http://api.postcodes.io";
             var client = new RestClient(requestUrl);
@@ -20,17 +20,17 @@ namespace BusBoard.Api
             return closestTwoStops;
         }
         
-        public IEnumerable<Bus> GetListOfArrivalPredictionsForStopPoint(string stopCode)
+        public static IEnumerable<BusArrivalPrediction> GetListOfArrivalPredictionsForStopPoint(string stopCode)
         {
             var requestUrl = "https://api.tfl.gov.uk";
             var client = new RestClient(requestUrl);
             var request = new RestRequest($"StopPoint/{stopCode}/Arrivals", DataFormat.Json);
-            var buses = client.Execute<List<Bus>>(request).Data;
-            IEnumerable<Bus> nextFiveBuses = buses.OrderBy(bus => bus.ExpectedArrival).Take(5);
+            var buses = client.Execute<List<BusArrivalPrediction>>(request).Data;
+            IEnumerable<BusArrivalPrediction> nextFiveBuses = buses.OrderBy(bus => bus.ExpectedArrival).Take(5);
             return nextFiveBuses;
         }
         
-        private List<BusStop> GetBusStopsNearPostcode(PostcodeLocation postcodeLocation)
+        private static List<BusStop> GetBusStopsNearPostcode(PostcodeLocation postcodeLocation)
         {
             var requestUrl = "https://api.tfl.gov.uk";
             var client = new RestClient(requestUrl);
