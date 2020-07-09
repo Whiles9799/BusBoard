@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using RestSharp;
-using RestSharp.Authenticators;
 
 namespace BusBoard.ConsoleApp
 {
@@ -13,21 +6,30 @@ namespace BusBoard.ConsoleApp
   {
     static void Main(string[] args)
     {
+      TflApi api = new TflApi();
+      PromptUserAndGetInputFromConsole(api);
+    }
+
+    private static void PromptUserAndGetInputFromConsole(TflApi api)
+    {
       Console.WriteLine("Postcode or Stop point ID? (P or S)");
-      switch (Console.ReadLine())
+      switch (Console.ReadLine().ToUpper())
       {
         case "S":
           Console.WriteLine("Please enter your desired stop point ID:");
           var stopCode = Console.ReadLine();
-          PrintBussesFromStopCode(stopCode);
+          Console.WriteLine(" ");
+          PrintBusesFromStopCode(stopCode, "", api);
           break;
         case "P":
           Console.WriteLine("Please enter your desired postcode");
           var postcode = Console.ReadLine();
-          foreach (var sc in getTwoClosestBusStopsToPostcode(postcode))
+          Console.WriteLine(" ");
+          foreach (var sc in api.GetTwoClosestBusStopsToPostcode(postcode))
           {
-            PrintBussesFromStopCode(sc);
+            PrintBusesFromStopCode(sc.NaptanId, sc.CommonName, api);
           }
+
           break;
         default:
           Console.WriteLine("Please enter S or P");
@@ -35,16 +37,10 @@ namespace BusBoard.ConsoleApp
       }
     }
 
-    private static List<String> getTwoClosestBusStopsToPostcode(string postcode)
+    private static void PrintBusesFromStopCode(string stopCode, string commonName, TflApi api)
     {
-      
-    }
-
-    private static void PrintBussesFromStopCode(string stopCode)
-    {
-      var response = GetListOfArrivalPredictionsForStopPoint(stopCode);
-      var buses = GetNext5BusesFromApiResponse(response);
-      Console.WriteLine($"Next 5 Buses at stop {stopCode}");
+      var buses = api.GetListOfArrivalPredictionsForStopPoint(stopCode);
+      Console.WriteLine($"Next 5 Buses at stop {stopCode} - {commonName}");
       foreach (var bus in buses)
       {
         Console.WriteLine(
@@ -53,22 +49,9 @@ namespace BusBoard.ConsoleApp
 
       Console.WriteLine(" ");
     }
-
-
-    private static IRestResponse GetListOfArrivalPredictionsForStopPoint(string stopCode)
-    {
-      var requestUrl = "https://api.tfl.gov.uk";
-      var client = new RestClient(requestUrl);
-      var request = new RestRequest($"StopPoint/{stopCode}/Arrivals", DataFormat.Json);
-      var response = client.Execute(request);
-      return response;
-    }
-
-    private static List<Bus> GetNext5BusesFromApiResponse(IRestResponse response)
-    {
-      var buses = JsonConvert.DeserializeObject<List<Bus>>(response.Content);
-      buses.Sort();
-      return buses.GetRange(0, 5);
-    }
+    
+    
+    
   }
 }
+
