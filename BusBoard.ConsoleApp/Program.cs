@@ -42,7 +42,18 @@ namespace BusBoard.ConsoleApp
       IRestResponse response = LookupPostcodeLocation(postcodeString);
       var postcodeApiResponse = JsonConvert.DeserializeObject<PostcodeApiResponse>(response.Content);
       var postcode = postcodeApiResponse.Result;
+      List<BusStop> nearbyStops = GetBusStopsNearPostcode(postcode);
       return null;
+    }
+
+    private static List<BusStop> GetBusStopsNearPostcode(Postcode postcode)
+    {
+      var requestUrl = "https://api.tfl.gov.uk";
+      var client = new RestClient(requestUrl);
+      var request = new RestRequest($"StopPoint?stopTypes=NaptanPublicBusCoachTram&radius=200&useStopPointHierarchy=false&returnLines=false&lat={postcode.Latitude}&lon={postcode.Longitude}", DataFormat.Json);
+      var response = client.Execute(request);
+      var busStopApiResponse = JsonConvert.DeserializeObject<BusStopApiResponse>(response.Content);
+      return busStopApiResponse.StopPoints;
     }
 
     private static IRestResponse LookupPostcodeLocation(string postcode)
