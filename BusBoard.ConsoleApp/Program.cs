@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using RestSharp;
-using RestSharp.Authenticators;
+using BusBoard.Api;
 
 namespace BusBoard.ConsoleApp
 {
@@ -13,11 +7,11 @@ namespace BusBoard.ConsoleApp
   {
     static void Main(string[] args)
     {
-      TflApi api = new TflApi();
+      BusBoard.Api.TflApi api = new BusBoard.Api.TflApi();
       PromptUserAndGetInputFromConsole(api);
     }
 
-    private static void PromptUserAndGetInputFromConsole(TflApi api)
+    private static void PromptUserAndGetInputFromConsole(BusBoard.Api.TflApi api)
     {
       Console.WriteLine("Postcode or Stop point ID? (P or S)");
       switch (Console.ReadLine().ToUpper())

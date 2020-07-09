@@ -3,7 +3,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using RestSharp;
 
-namespace BusBoard.ConsoleApp
+namespace BusBoard.Api
 {
     public class TflApi
     {
