@@ -9,6 +9,7 @@ namespace BusBoard.Api
        public DateTime ExpectedArrival { get; set; }
        public string LineName { get; set; }
        public string DestinationName { get; set; }
+       public int TimeToStation { get; set; }
     }
     
 }

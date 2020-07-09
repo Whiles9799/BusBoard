@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using RestSharp;
@@ -15,6 +16,10 @@ namespace BusBoard.Api
             var response = client.Execute(request);
             var postcodeApiResponse = JsonConvert.DeserializeObject<PostcodeApiResponse>(response.Content);
             var postcode = postcodeApiResponse.Result;
+            if (postcode == null)
+            {
+                throw new ArgumentException();
+            }
             List<BusStop> nearbyStops = GetBusStopsNearPostcode(postcode);
             IEnumerable<BusStop> closestTwoStops = nearbyStops.OrderBy(stop => stop.Distance).Take(2);
             return closestTwoStops;

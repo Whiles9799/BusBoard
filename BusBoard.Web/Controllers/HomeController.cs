@@ -8,6 +8,7 @@ namespace BusBoard.Web.Controllers
   {
     public ActionResult Index()
     {
+      Response.AddHeader("Refresh", "30");
       return View();
     }
 

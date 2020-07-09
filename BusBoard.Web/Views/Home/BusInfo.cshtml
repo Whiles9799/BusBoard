@@ -8,28 +8,37 @@
 
 <div class="row">
     <h3>Departure Information for bus stops near @Model.PostCode.ToUpper()</h3>
-    
-    @foreach (var stop in TflApi.GetTwoClosestBusStopsToPostcode(Model.PostCode))
+    @try
     {
-        var buses = TflApi.GetListOfArrivalPredictionsForStopPoint(stop.NaptanId);
-        <p><b>@($"{stop.NaptanId} - {stop.CommonName}")</b></p>
-        <table border = "1px solid black">
-            <tr>
-                <th style="padding:10px">Line</th>
-                <th style="padding:10px">Destination</th>
-                <th style="padding:10px">ETA</th>
-            </tr>
-        
-            @foreach (var bus in buses)
-            {
+        foreach (var stop in TflApi.GetTwoClosestBusStopsToPostcode(Model.PostCode))
+        {
+            var buses = TflApi.GetListOfArrivalPredictionsForStopPoint(stop.NaptanId);
+            <p><b>@($"{stop.NaptanId} - {stop.CommonName}")</b></p>
+            <table border="1px solid black">
                 <tr>
-                    <td style="padding:10px">@bus.LineName</td>
-                    <td style="padding:10px">@bus.DestinationName</td>
-                    <td style="padding:10px">@bus.ExpectedArrival.AddHours(1).ToString("HH:mm:ss tt")</td>
+                    <th style="padding:10px">Line</th>
+                    <th style="padding:10px">Destination</th>
+                    <th style="padding:10px">ETA</th>
+                    <th style="padding:10px">Time until arrival</th>
                 </tr>
-            }
-        </table>
-        <br>
-        <br>
-    } 
+
+                @foreach (var bus in buses)
+                {
+                    <tr>
+                        <td style="padding:10px">@bus.LineName</td>
+                        <td style="padding:10px">@bus.DestinationName</td>
+                        <td style="padding:10px">@bus.ExpectedArrival.AddHours(1).ToString("HH:mm:ss tt")</td>
+                        <td style="padding:10px">@(TimeSpan.FromSeconds(bus.TimeToStation).ToString(@"mm\:ss") + " mins") </td>
+                    </tr>
+                }
+            </table>
+            <br>
+            <br>
+        }
+    }
+    catch (ArgumentException ex)
+    {
+        <p style = "font-size: 36px;"><b>Oops! No such postcode exists</b></p>
+    }
+    
 </div>
