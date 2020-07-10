@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using BusBoard.Api;
+using BusBoard.ConsoleApp;
 using BusBoard.Web.Models;
 using BusBoard.Web.ViewModels;
 
@@ -27,9 +28,10 @@ namespace BusBoard.Web.Controllers
       IEnumerable<BusStop> busStops;
       try
       {
-        busStops = TflApi.GetTwoClosestBusStopsToPostcode(selection.Postcode);
+        var postcodeLocation = PostcodeApi.GetPostcodeLocation(selection.Postcode);
+        busStops = TflApi.GetBusStopsNearPostcode(postcodeLocation);
       }
-      catch (ArgumentException ex)
+      catch
       {
         return View(new BusInfo(selection.Postcode, null));
       }
