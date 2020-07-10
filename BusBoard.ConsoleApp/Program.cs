@@ -19,7 +19,7 @@ namespace BusBoard.ConsoleApp
             var postcodeLocation = PostcodeApi.GetPostcodeLocation(postcode);
             foreach (var sc in TflApi.GetBusStopsNearPostcode(postcodeLocation))
             {
-                var buses = TflApi.GetListOfArrivalPredictionsForStopPoint(sc.NaptanId);
+                var buses = TflApi.GetArrivalPredictionsAtBusStop(sc.NaptanId);
                 PrintBusesFromStopCode(buses, sc);
             }
         }

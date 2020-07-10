@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BusBoard.Api;
 using Newtonsoft.Json;
@@ -8,7 +9,7 @@ namespace BusBoard.ConsoleApp
 {
     public class TflApi
     {
-        public static IEnumerable<BusArrivalPrediction> GetListOfArrivalPredictionsForStopPoint(string stopCode)
+        public static IEnumerable<BusArrivalPrediction> GetArrivalPredictionsAtBusStop(string stopCode)
         {
             var requestUrl = "https://api.tfl.gov.uk";
             var client = new RestClient(requestUrl);
@@ -26,6 +27,19 @@ namespace BusBoard.ConsoleApp
             var busStopApiResponse = JsonConvert.DeserializeObject<BusStopApiResponse>(response.Content);
             var nearbyStops = busStopApiResponse.StopPoints;
             return nearbyStops.OrderBy(stop => stop.Distance).Take(2);
+        }
+
+        public static IEnumerable<Disruption> GetDisruptionsAtBusStop(string stopCode)
+        {
+            var requestUrl = "https://api.tfl.gov.uk";
+            var client = new RestClient(requestUrl);
+            var request = new RestRequest($"StopPoint/{stopCode}/Disruption");
+            var response = client.Execute(request);
+            var disruptionApiResponse = JsonConvert.DeserializeObject<List<Disruption>>(response.Content);
+            Console.WriteLine(disruptionApiResponse);
+            foreach(var i in disruptionApiResponse)
+                Console.WriteLine(i.Description);
+            return disruptionApiResponse;
         }
         
         
