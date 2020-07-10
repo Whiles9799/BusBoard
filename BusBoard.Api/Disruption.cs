@@ -7,5 +7,6 @@ namespace BusBoard.Api
         public string Type { get; set; }
         public DateTime ToDate { get; set; }
         public string Description { get; set; }
+        public string Appearance { get; set; }
     }
 }

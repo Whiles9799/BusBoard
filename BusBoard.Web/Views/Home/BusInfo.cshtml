@@ -8,13 +8,21 @@
 
 <div class="row">
     <h3>Departure Information for bus stops near @Model.PostCode.ToUpper()</h3>
-    @if (Model.ArrivalsAtStop == null)
+    @if (Model.StopInfoList == null)
     {
         <p><b style = "font-size: 32px" > Oops! The Postcode: @Model.PostCode.ToUpper() does not exist!</b></p>
     }
     else{
-        foreach(var arrivalsAtStop in Model.ArrivalsAtStop){
-            <p><b>@($"{arrivalsAtStop.BusStop.NaptanId} - {arrivalsAtStop.BusStop.CommonName}")</b></p>
+        foreach(var stopInfo in Model.StopInfoList){
+            <p><b style = "font-size: 24px">@($"{stopInfo.BusStop.NaptanId} - {stopInfo.BusStop.CommonName}")</b></p>
+            foreach (var disruption in stopInfo.Disruptions)
+            {
+                <b style = "font-size: 18px; color: red" > Disruption at @stopInfo.BusStop.CommonName </b>
+                <p style = "font-size: 16px; color: red" > Type: @disruption.Type - @disruption.Appearance <br/>
+                 Until approx: @disruption.ToDate.ToString("dd/MM/yyyy")<br/>                                                                                        
+                 @disruption.Description </p>                                                                                          
+            }
+        
             <table border="1px solid black">
                 <tr>
                     <th style="padding:10px">Line</th>
@@ -23,7 +31,7 @@
                     <th style="padding:10px">Time until arrival</th>
                 </tr>
 
-                @foreach (var arrival in arrivalsAtStop.Arrivals)
+                @foreach (var arrival in stopInfo.Arrivals)
                 {
                     <tr>
                         <td style="padding:10px">@arrival.LineName</td>
@@ -37,6 +45,7 @@
         <br>
         }
     }
+    
     
     
 </div>

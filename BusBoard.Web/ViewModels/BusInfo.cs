@@ -8,18 +8,17 @@ namespace BusBoard.Web.ViewModels
 {
   public class BusInfo
   {
-    public BusInfo(string postCode, List<ArrivalsAtStop> arrivalsAtStop, List<DisruptionsAtStop> disruptionsAtStop)
+    public BusInfo(string postCode, List<StopInfo> stopInfoList)
     {
       PostCode = postCode;
-      ArrivalsAtStop = arrivalsAtStop;
-      DisruptionsAtStop = disruptionsAtStop;
+      StopInfoList = stopInfoList;
     }
 
-    public List<ArrivalsAtStop> ArrivalsAtStop { get; set; }
+    public List<StopInfo> StopInfoList { get; set; }
     
-    public List<DisruptionsAtStop> DisruptionsAtStop { get; set; }
 
     public string PostCode { get; set; }
+    
 
   }
 }

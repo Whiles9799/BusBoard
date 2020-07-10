@@ -29,18 +29,16 @@ namespace BusBoard.Web.Controllers
       }
       catch
       {
-        return View(new BusInfo(selection.Postcode, null, null));
+        return View(new BusInfo(selection.Postcode, null));
       }
-      List<ArrivalsAtStop> arrivalsAtStopList = new List<ArrivalsAtStop>();
-      List<DisruptionsAtStop> disruptionsAtStopList = new List<DisruptionsAtStop>();
+      List<StopInfo> arrivalsAtStopList = new List<StopInfo>();
       foreach (var stop in busStops)
       {
         var disruptions = TflApi.GetDisruptionsAtBusStop(stop.NaptanId).ToList();
         var arrivals = TflApi.GetArrivalPredictionsAtBusStop(stop.NaptanId).ToList();
-        arrivalsAtStopList.Add(new ArrivalsAtStop(stop, arrivals)); 
-        disruptionsAtStopList.Add(new DisruptionsAtStop(stop, disruptions));
+        arrivalsAtStopList.Add(new StopInfo(stop, arrivals,disruptions)); 
       }
-      var info = new BusInfo(selection.Postcode, arrivalsAtStopList, disruptionsAtStopList);
+      var info = new BusInfo(selection.Postcode, arrivalsAtStopList);
       return View(info);
     }
 
