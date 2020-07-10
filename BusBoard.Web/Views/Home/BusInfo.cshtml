@@ -8,8 +8,12 @@
 
 <div class="row">
     <h3>Departure Information for bus stops near @Model.PostCode.ToUpper()</h3>
-    @foreach(var stop in Model.IncomingBusesToStop.Keys){
-        
+    @if (Model.ArrivalsAtStop == null)
+    {
+        <p><b style = "font-size: 32px" > Oops! The Postcode: @Model.PostCode.ToUpper() does not exist!</b></p>
+    }
+    else{
+        foreach(var stop in Model.ArrivalsAtStop.Keys){
             <p><b>@($"{stop.NaptanId} - {stop.CommonName}")</b></p>
             <table border="1px solid black">
                 <tr>
@@ -19,7 +23,7 @@
                     <th style="padding:10px">Time until arrival</th>
                 </tr>
 
-                @foreach (var bus in Model.IncomingBusesToStop[stop])
+                @foreach (var bus in Model.ArrivalsAtStop[stop])
                 {
                     <tr>
                         <td style="padding:10px">@bus.LineName</td>
@@ -29,13 +33,10 @@
                     </tr>
                 }
             </table>
-            <br>
-            <br>
+        <br>
+        <br>
         }
     }
-    catch (ArgumentException ex)
-    {
-        <p style = "font-size: 36px;"><b>Oops! No such postcode exists</b></p>
-    }
+    
     
 </div>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using BusBoard.Api;
 using BusBoard.Web.Models;
@@ -21,7 +22,16 @@ namespace BusBoard.Web.Controllers
       // Write code here to populate the view model with info from the APIs.
       // Then modify the view (in Views/Home/BusInfo.cshtml) to render upcoming buses.
       var stopInfo = new Dictionary<BusStop, List<BusArrivalPrediction>>();
-      foreach (var stop in TflApi.GetTwoClosestBusStopsToPostcode(selection.Postcode))
+      IEnumerable<BusStop> busStops;
+      try
+      {
+        busStops = TflApi.GetTwoClosestBusStopsToPostcode(selection.Postcode);
+      }
+      catch (ArgumentException ex)
+      {
+        return View(new BusInfo(selection.Postcode, null));
+      }
+      foreach (var stop in busStops)
       {
         var buses = new List<BusArrivalPrediction>();
         foreach (var bus in TflApi.GetListOfArrivalPredictionsForStopPoint(stop.NaptanId))

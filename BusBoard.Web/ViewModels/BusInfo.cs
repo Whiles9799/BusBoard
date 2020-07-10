@@ -10,10 +10,10 @@ namespace BusBoard.Web.ViewModels
     public BusInfo(string postCode, Dictionary<BusStop,List<BusArrivalPrediction>> buses)
     {
       PostCode = postCode;
-      IncomingBusesToStop = buses;
+      ArrivalsAtStop = buses;
     }
 
-    public Dictionary<BusStop,List<BusArrivalPrediction>> IncomingBusesToStop { get; set; }
+    public Dictionary<BusStop,List<BusArrivalPrediction>> ArrivalsAtStop { get; set; }
 
     public string PostCode { get; set; }
 
