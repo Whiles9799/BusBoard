@@ -8,11 +8,8 @@
 
 <div class="row">
     <h3>Departure Information for bus stops near @Model.PostCode.ToUpper()</h3>
-    @try
-    {
-        foreach (var stop in TflApi.GetTwoClosestBusStopsToPostcode(Model.PostCode))
-        {
-            var buses = TflApi.GetListOfArrivalPredictionsForStopPoint(stop.NaptanId);
+    @foreach(var stop in Model.IncomingBusesToStop.Keys){
+        
             <p><b>@($"{stop.NaptanId} - {stop.CommonName}")</b></p>
             <table border="1px solid black">
                 <tr>
@@ -22,7 +19,7 @@
                     <th style="padding:10px">Time until arrival</th>
                 </tr>
 
-                @foreach (var bus in buses)
+                @foreach (var bus in Model.IncomingBusesToStop[stop])
                 {
                     <tr>
                         <td style="padding:10px">@bus.LineName</td>
