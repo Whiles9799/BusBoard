@@ -59,6 +59,7 @@
     <Compile Include="BusArrivalPrediction.cs" />
     <Compile Include="BusStop.cs" />
     <Compile Include="BusStopApiResponse.cs" />
+    <Compile Include="PostcodeApi.cs" />
     <Compile Include="PostcodeLocation.cs" />
     <Compile Include="PostcodeApiResponse.cs" />
     <Compile Include="Program.cs" />
