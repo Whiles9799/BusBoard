@@ -57,8 +57,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusArrivalPrediction.cs" />
+    <Compile Include="BusStop.cs" />
+    <Compile Include="BusStopApiResponse.cs" />
+    <Compile Include="PostcodeApi.cs" />
+    <Compile Include="PostcodeLocation.cs" />
+    <Compile Include="PostcodeApiResponse.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TflApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
