@@ -21,11 +21,6 @@ namespace BusBoard.Web.Controllers
     public ActionResult BusInfo(PostcodeSelection selection)
     {
       Response.AddHeader("Refresh", "30");
-      // Add some properties to the BusInfo view model with the data you want to render on the page.
-      // Write code here to populate the view model with info from the APIs.
-      // Then modify the view (in Views/Home/BusInfo.cshtml) to render upcoming buses.
-      var arrivalsAtStop = new Dictionary<BusStop, List<BusArrivalPrediction>>();
-      var disruptionsAtStop = new Dictionary<BusStop, List<Disruption>>();
       IEnumerable<BusStop> busStops;
       try
       {
@@ -34,21 +29,18 @@ namespace BusBoard.Web.Controllers
       }
       catch
       {
-        return View(new BusInfo(selection.Postcode, null));
+        return View(new BusInfo(selection.Postcode, null, null));
       }
+      List<ArrivalsAtStop> arrivalsAtStopList = new List<ArrivalsAtStop>();
+      List<DisruptionsAtStop> disruptionsAtStopList = new List<DisruptionsAtStop>();
       foreach (var stop in busStops)
       {
         var disruptions = TflApi.GetDisruptionsAtBusStop(stop.NaptanId).ToList();
-        foreach (var disruption in disruptions)
-        {
-          Console.WriteLine(disruption.Description);
-        }
-        var buses = TflApi.GetArrivalPredictionsAtBusStop(stop.NaptanId).ToList();
-        arrivalsAtStop.Add(stop, buses);
-        disruptionsAtStop.Add(stop, disruptions);
+        var arrivals = TflApi.GetArrivalPredictionsAtBusStop(stop.NaptanId).ToList();
+        arrivalsAtStopList.Add(new ArrivalsAtStop(stop, arrivals)); 
+        disruptionsAtStopList.Add(new DisruptionsAtStop(stop, disruptions));
       }
-      var info = new BusInfo(selection.Postcode, arrivalsAtStop);
-      
+      var info = new BusInfo(selection.Postcode, arrivalsAtStopList, disruptionsAtStopList);
       return View(info);
     }
 

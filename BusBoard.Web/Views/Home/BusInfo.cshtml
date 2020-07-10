@@ -13,8 +13,8 @@
         <p><b style = "font-size: 32px" > Oops! The Postcode: @Model.PostCode.ToUpper() does not exist!</b></p>
     }
     else{
-        foreach(var stop in Model.ArrivalsAtStop.Keys){
-            <p><b>@($"{stop.NaptanId} - {stop.CommonName}")</b></p>
+        foreach(var arrivalsAtStop in Model.ArrivalsAtStop){
+            <p><b>@($"{arrivalsAtStop.BusStop.NaptanId} - {arrivalsAtStop.BusStop.CommonName}")</b></p>
             <table border="1px solid black">
                 <tr>
                     <th style="padding:10px">Line</th>
@@ -23,13 +23,13 @@
                     <th style="padding:10px">Time until arrival</th>
                 </tr>
 
-                @foreach (var bus in Model.ArrivalsAtStop[stop])
+                @foreach (var arrival in arrivalsAtStop.Arrivals)
                 {
                     <tr>
-                        <td style="padding:10px">@bus.LineName</td>
-                        <td style="padding:10px">@bus.DestinationName</td>
-                        <td style="padding:10px">@bus.ExpectedArrival.AddHours(1).ToString("HH:mm:ss tt")</td>
-                        <td style="padding:10px">@(TimeSpan.FromSeconds(bus.TimeToStation).ToString(@"mm\:ss") + " mins") </td>
+                        <td style="padding:10px">@arrival.LineName</td>
+                        <td style="padding:10px">@arrival.DestinationName</td>
+                        <td style="padding:10px">@arrival.ExpectedArrival.AddHours(1).ToString("HH:mm:ss tt")</td>
+                        <td style="padding:10px">@(TimeSpan.FromSeconds(arrival.TimeToStation).ToString(@"mm\:ss") + " mins") </td>
                     </tr>
                 }
             </table>

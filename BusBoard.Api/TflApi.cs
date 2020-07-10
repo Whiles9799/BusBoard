@@ -26,7 +26,7 @@ namespace BusBoard.ConsoleApp
             var response = client.Execute(request);
             var busStopApiResponse = JsonConvert.DeserializeObject<BusStopApiResponse>(response.Content);
             var nearbyStops = busStopApiResponse.StopPoints;
-            return nearbyStops.OrderBy(stop => stop.Distance).Take(2);
+            return nearbyStops.OrderBy(stop => stop.Distance);
         }
 
         public static IEnumerable<Disruption> GetDisruptionsAtBusStop(string stopCode)
