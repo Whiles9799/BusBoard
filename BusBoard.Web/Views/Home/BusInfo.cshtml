@@ -4,10 +4,9 @@
   ViewBag.Title = "Bus Information";
 }
 
-<h2>BusInfo</h2>
 
 <div class="row">
-    <h3>Departure Information for bus stops near @Model.PostCode.ToUpper()</h3>
+    <h1>Bus Departure Information for @Model.PostCode.ToUpper()</h1>
     @if (Model.StopInfoList == null)
     {
         <p><b style = "font-size: 32px" > Oops! The Postcode: @Model.PostCode.ToUpper() does not exist!</b></p>
@@ -17,13 +16,13 @@
             <p><b style = "font-size: 24px">@($"{stopInfo.BusStop.NaptanId} - {stopInfo.BusStop.CommonName}")</b></p>
             foreach (var disruption in stopInfo.Disruptions)
             {
-                <b style = "font-size: 18px; color: red" > Disruption at @stopInfo.BusStop.CommonName </b>
-                <p style = "font-size: 16px; color: red" > Type: @disruption.Type - @disruption.Appearance <br/>
-                 Until approx: @disruption.ToDate.ToString("dd/MM/yyyy")<br/>                                                                                        
+                <b style = "font-size: 20px; color: red" > <u>Disruption at @stopInfo.BusStop.CommonName</u> </b>
+                <p style = "font-size: 18px; color: red" > <b>Type: @disruption.Type - @disruption.Appearance <br/>
+                        Until approx: @disruption.ToDate.ToString("dd/MM/yyyy")</b><br/>                                                                                        
                  @disruption.Description </p>                                                                                          
             }
         
-            <table border="1px solid black">
+            <table border="1px solid black" style="width:80%; font-size: 18px; background-color: #ebebeb">
                 <tr>
                     <th style="padding:10px">Line</th>
                     <th style="padding:10px">Destination</th>

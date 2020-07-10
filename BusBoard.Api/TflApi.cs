@@ -36,9 +36,6 @@ namespace BusBoard.ConsoleApp
             var request = new RestRequest($"StopPoint/{stopCode}/Disruption");
             var response = client.Execute(request);
             var disruptionApiResponse = JsonConvert.DeserializeObject<List<Disruption>>(response.Content);
-            Console.WriteLine(disruptionApiResponse);
-            foreach(var i in disruptionApiResponse)
-                Console.WriteLine(i.Description);
             return disruptionApiResponse;
         }
         
